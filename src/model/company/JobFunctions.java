@@ -1,4 +1,4 @@
-package model;
+package model.company;
 
 public class JobFunctions {
 }

@@ -1,8 +1,10 @@
 package model.company;
 
+import java.util.Vector;
+
 public class JobFunctions {
 
-    private String[] designations;
+    private Vector<JobFunctions> designations;
 
     public JobFunctions(){
 
@@ -13,7 +15,7 @@ public class JobFunctions {
     }
 
     public String getJobFunctions(int index){
-        return
+        return getJobFunctions(index);
     }
 
     public void removeJobFunctions(int index){
@@ -21,7 +23,7 @@ public class JobFunctions {
     }
 
     public int getSize(){
-        return
+        return getSize();
     }
 
 }

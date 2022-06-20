@@ -25,11 +25,11 @@ public class LogBook {
     }
 
     public UserAction getEntry(int index){
-        return
+        return getEntry(index);
     }
 
     public int getSize(){
-        return
+        return entries.size();
     }
 
     public void logBookClosed(){

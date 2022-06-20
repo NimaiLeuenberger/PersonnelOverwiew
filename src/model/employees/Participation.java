@@ -3,9 +3,11 @@ package model.employees;
 import model.company.JobFunctions;
 import model.company.Teams;
 
+import java.util.Vector;
+
 public class Participation {
     private JobFunctions[] function;
-    private Teams[] teams;
+    private Vector<Teams> teams;
     private Person owner;
 
     public Participation(String person){
@@ -16,14 +18,14 @@ public class Participation {
     }
 
     public String getFunctionName(int index){
-        return
+        return getFunctionName(index);
     }
 
     public void removeFunction(int index){
 
     }
     public int getNumberOfFunctions(){
-        return
+        return getNumberOfFunctions();
     }
 
     public void addTeams (Teams teams){
@@ -31,15 +33,15 @@ public class Participation {
     }
 
     public String getTeamName(int index){
-       return
+       return getTeamName(index);
     }
 
     public void removeTeam(int index){
-
+        teams.remove(index);
     }
 
-    public size getNumberOfTeams(){
-
+    public int getNumberOfTeams(){
+        return teams.size();
     }
 
 }

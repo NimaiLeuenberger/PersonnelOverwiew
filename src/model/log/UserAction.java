@@ -17,7 +17,7 @@ public class UserAction {
     }
 
     public String getEntry() {
-        return entry;
+        return getEntry();
     }
 }
 

@@ -1,11 +1,12 @@
 package model.employees;
 
-public class HRPerson{
+public class HRPerson extends Person{
 
     private int modus;
     private String pwd;
 
-    public HRPerson(String fName, String lName,   int modus){
+    public HRPerson(){
+        super();
 
     }
     public void change(String person, int modus) {

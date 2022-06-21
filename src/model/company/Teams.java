@@ -1,26 +1,16 @@
 package model.company;
 
+import java.util.Vector;
+
 public class Teams {
 
-    private String[] designations;
+    private String team;
 
-    public Teams(){
-
+    public Teams(String team){
+        this.team = team;
     }
 
-    public void addTeam(String function){
-
-    }
-
-    public String getTeam(int index){
-        return
-    }
-
-    public void removeTeam(int index){
-
-    }
-
-    public int getSize(){
-        return
+    public String getName(){
+        return this.team;
     }
 }

@@ -1,15 +1,22 @@
 package view;
 
+import model.company.Department;
+import model.company.JobFunctions;
+import model.company.Teams;
+import model.employees.Participation;
+import model.employees.Person;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public class OverView extends JFrame {
     private JTabbedPane tabPane;
-    private JPanel overview, assignment, persons, masterdata, logbook, persList, detailPane, detailPane2, detailPane3;
+    private JPanel overview, assignment, personsPane, masterdata, logbook, persList, detailPane, detailPane2, detailPane3;
     // Übersicht, Zuordnung, Personen, Stammdaten, Logbuch
     private JScrollPane personScroll, personScroll2, personScroll3, teamScroll;
     private JTextField nameField, nameField2, nameField3, abteilField, abteilField2, funkField;
@@ -18,6 +25,12 @@ public class OverView extends JFrame {
     private JButton addBtn, delBtn, editBtn;
     private boolean isPerson, isAdmin;
     public DefaultListModel list;
+
+    public Vector<Person> persons;
+    public Vector<Participation> participations;
+    public Vector<Department> department;
+    public Vector<JobFunctions> jobFunctions;
+    public Vector<Teams> teams;
 
 
     public OverView(boolean isPerson, boolean isAdmin){
@@ -33,6 +46,32 @@ public class OverView extends JFrame {
     }
 
     private void init(){
+        // persons:
+        persons = new Vector<>();
+        department = new Vector<>();
+        jobFunctions = new Vector<>();
+        teams = new Vector<>();
+        department.add(new Department("Abteilung 1"));
+        department.add(new Department("Abteilung 2"));
+        department.add(new Department("Abteilung 3"));
+
+        jobFunctions.add(new JobFunctions("Chef"));
+        jobFunctions.add(new JobFunctions("CFO"));
+        jobFunctions.add(new JobFunctions("COO"));
+
+        teams.add(new Teams("Team 1"));
+        teams.add(new Teams("Team 2"));
+        teams.add(new Teams("Team 3"));
+
+        participations = new Vector<>();
+        participations.add(new Participation(jobFunctions, teams, department.get(1)));
+        participations.add(new Participation(jobFunctions, teams, department.get(2)));
+        participations.add(new Participation(jobFunctions, teams, department.get(0)));
+
+        persons.add(new Person("Nimai", "Leuenberger", participations.get(1)));
+        persons.add(new Person("Stef", "De Giorgi", participations.get(0)));
+        persons.add(new Person("Andrej", "Velo", participations.get(2)));
+
         // overview tab:
         GridLayout grid = new GridLayout(1, 2);
         grid.setHgap(25);
@@ -40,17 +79,21 @@ public class OverView extends JFrame {
         overview.setBorder(BorderFactory.createTitledBorder("Personen: "));
 
 
-        String[] persList = { "Hans Fritz", "Nimai Leuenberger", "Nick Gur", "Nöck Gur", "Nik Gur", "Nick Hallo", "Nick Gur", "Nick Gur", "Nick Gur"};
-        JList listPers = new JList(persList);
+        Vector<String> list = new Vector<>();
+        list.add(persons.get(0).getFirstName() + " " + persons.get(0).getLastName());
+        list.add(persons.get(1).getFirstName() + " " + persons.get(1).getLastName());
+        list.add(persons.get(2).getFirstName() + " " + persons.get(2).getLastName());
+        JList listPers = new JList(list);
         listPers.setSelectedIndex(0);
         listPers.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 nameField.setText(listPers.getSelectedValue().toString());
+                abteilField.setText(persons.get(listPers.getSelectedIndex()).getParticipation().getDepartementName());
+                funkField.setText(persons.get(listPers.getSelectedIndex()).getParticipation().getFunctionName(listPers.getSelectedIndex()));
             }
         });
         personScroll = new JScrollPane(listPers, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
 
         detailPane = new JPanel(new GridBagLayout());
         detailPane.setBorder(BorderFactory.createTitledBorder("Detail: "));
@@ -62,7 +105,8 @@ public class OverView extends JFrame {
         nameField.setEditable(false);
         c.gridx = 1; c.gridy = 0; detailPane.add(nameField, c);
         c.gridx = 0; c.gridy = 1; detailPane.add(new JLabel("Abteilung: "), c);
-        abteilField = new JTextField("Die richtige Abteilung");
+        abteilField = new JTextField(persons.get(listPers.getSelectedIndex()).getParticipation().getDepartementName());
+        System.out.println(listPers.getSelectedIndex());
         abteilField.setEditable(false);
         c.gridx = 1; c.gridy = 1; detailPane.add(abteilField, c);
         // TODO: make a list of the class Person and get its abteilung
@@ -70,7 +114,7 @@ public class OverView extends JFrame {
         funkField = new JTextField("Die richtige Funktion");
         funkField.setEditable(false);
         c.gridx = 1; c.gridy = 2; detailPane.add(funkField, c);
-        String[] teamList = {"More cash", "Money", "Free Giveaway", "Dollars", "Cars", "Boats", "Mansions", "Women"};
+        String[] teamList =  {persons.get(0).getParticipation().getTeamName(0), persons.get(0).getParticipation().getTeamName(1), persons.get(0).getParticipation().getTeamName(2)};
         JList listTeam = new JList(teamList);
         teamScroll = new JScrollPane(listTeam, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         c.gridx = 0; c.gridy = 3; detailPane.add(new JLabel("Teams: "), c);
@@ -89,12 +133,15 @@ public class OverView extends JFrame {
         assignment.setBorder(BorderFactory.createTitledBorder("Personen bearbeiten: "));
 
 
-        JList listPers2 = new JList(persList);
+        JList listPers2 = new JList(list);
         listPers2.setSelectedIndex(0);
         listPers2.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 nameField2.setText(listPers2.getSelectedValue().toString());
+                abteilField2.setText(persons.get(listPers2.getSelectedIndex()).getParticipation().getDepartementName());
+                funktionCombo.setSelectedIndex(listPers2.getSelectedIndex());
+                teamCombo.setSelectedIndex(listPers2.getSelectedIndex());
             }
         });
         personScroll2 = new JScrollPane(listPers2, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -115,7 +162,7 @@ public class OverView extends JFrame {
         c.gridx = 0; c.gridy = 2;
         detailPane2.add(new JLabel("Funktion: "), c);
         c.gridx = 1; c.gridy = 2;
-        String[] funkList = {"COO", "CFO", "Sekretärin", "Angestellter", "Kaffeemacher", "Putzfrau", "Hund"};
+        String[] funkList = {"COO", "CFO", "Chef"};
         funktionCombo = new JComboBox(funkList);
         detailPane2.add(funktionCombo, c);
         c.gridx = 0; c.gridy = 3;
@@ -130,14 +177,12 @@ public class OverView extends JFrame {
 
 
         // persons tab:
-        persons = new JPanel(new GridLayout(1,2));
-        persons.setBorder(BorderFactory.createTitledBorder("Personen bearbeiten: "));
+        personsPane = new JPanel(new GridLayout(1,2));
+        personsPane.setBorder(BorderFactory.createTitledBorder("Personen bearbeiten: "));
 
-        list = new DefaultListModel<String>();
-        for (int i = 0; i < persList.length; i++) {
-            list.add(i, persList[i]);
-        }
-        JList<String> listPers3 = new JList<String>(list);
+
+        JList listPers3 = new JList(list);
+        listPers3.setSelectedIndex(0);
         //JList listPers3 = new JList(persList);
         listPers3.setSelectedIndex(0);
         listPers3.addListSelectionListener(new ListSelectionListener() {
@@ -155,8 +200,8 @@ public class OverView extends JFrame {
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddPersDialog addPersDialog = new AddPersDialog(listPers3);
-                list.add(list.getSize(), addPersDialog.getNameField());
+                AddPersDialog addPersDialog = new AddPersDialog(persons);
+                list.add(list.size(), addPersDialog.getNameField());
             }
         });
         delBtn = new JButton(delImg);
@@ -187,7 +232,7 @@ public class OverView extends JFrame {
         c.gridx = 0; c.gridy = 0;
         detailPane3.add(new JLabel("Name: "), c);
         c.gridx = 1;
-        nameField3 = new JTextField(listPers3.getSelectedValue());
+        nameField3 = new JTextField(listPers3.getSelectedValue().toString());
         nameField3.setEditable(false);
         detailPane3.add(nameField3, c);
         c.gridx = 0; c.gridy = 1;
@@ -203,18 +248,18 @@ public class OverView extends JFrame {
         adminCheckBox.setEnabled(false);
         detailPane3.add(adminCheckBox, c);
 
-        persons.add(leftPane);
-        persons.add(detailPane3);
+        personsPane.add(leftPane);
+        personsPane.add(detailPane3);
 
 
         masterdata = new JPanel();
         logbook = new JPanel();
 
-
+        // tab pane:
         tabPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
         tabPane.addTab("Übersicht", overview);
         tabPane.addTab("Zuordnung", assignment);
-        tabPane.addTab("Personen", persons);
+        tabPane.addTab("Personen", personsPane);
         if (isAdmin){
             tabPane.addTab("Stammdaten", masterdata);
             tabPane.addTab("Logbuch", logbook);
@@ -227,17 +272,17 @@ public class OverView extends JFrame {
 class AddPersDialog extends JDialog{
     private JDialog dialog;
     private JPanel dataPane, btnPane;
-    private JTextField nameField;
+    private JTextField nameField, lastNameField;
     private JCheckBox hrCheckBox, adminCheckBox;
     public JButton saveBtn, abortBtn;
-    public JList listPers;
+    private Vector<Person> p;
 
-    AddPersDialog(JList listPers){
+    AddPersDialog(Vector<Person> persons){
         this.dialog = this;
         this.setTitle("Person erfassen");
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        this.listPers = listPers;
+        this.p = persons;
         dataPane = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -245,14 +290,19 @@ class AddPersDialog extends JDialog{
         c.gridx = 0; c.gridy = 0;
         dataPane.add(new JLabel("Name: "), c);
         c.gridx = 1;
-        nameField = new JTextField(listPers.getSelectedValue().toString());
+        nameField = new JTextField("");
         dataPane.add(nameField, c);
         c.gridx = 0; c.gridy = 1;
+        dataPane.add(new JLabel("Lastname: "), c);
+        c.gridx = 1;
+        lastNameField = new JTextField("");
+        dataPane.add(lastNameField, c);
+        c.gridx = 0; c.gridy = 2;
         dataPane.add(new JLabel("HR-Mitarbeiter: "), c);
         c.gridx = 1;
         hrCheckBox = new JCheckBox();
         dataPane.add(hrCheckBox, c);
-        c.gridx = 0; c.gridy = 2;
+        c.gridx = 0; c.gridy = 3;
         dataPane.add(new JLabel("Administrator: "), c);
         c.gridx = 1;
         adminCheckBox = new JCheckBox();
@@ -273,8 +323,7 @@ class AddPersDialog extends JDialog{
         saveBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listPers.setSelectedValue(nameField.getText(), true);
-
+                //p.add(nameField.getText(), lastNameField.getText(), new Participation(new JobFunctions("f"), new Teams("j"), new Department("j")));
                 dialog.dispose();
             }
         });

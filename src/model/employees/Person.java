@@ -29,5 +29,9 @@ public class Person {
         return lastName;
     }
 
+    public Participation getParticipation(){
+        return participation;
+    }
+
 
 }

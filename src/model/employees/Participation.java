@@ -7,44 +7,52 @@ import model.company.Teams;
 import java.util.Vector;
 
 public class Participation {
-    private Vector<JobFunctions> function;
+    private Vector<JobFunctions> functions;
     private Vector<Teams> teams;
     private Department department;
 
-    public Participation(JobFunctions f, Teams t, Department d){
+    public Participation(Vector<JobFunctions> f, Vector<Teams> t, Department d){
         this.department = d;
-        this.function = new Vector<>();
-        this.teams = new Vector<>();
+        this.functions = f;
+        this.teams = t;
     }
     public void addFunction(JobFunctions jobFunctions){
-
+        functions.add(jobFunctions);
     }
 
     public String getFunctionName(int index){
-        return getFunctionName(index);
+        return functions.get(index).getName();
     }
 
     public void removeFunction(int index){
-
+        functions.remove(index);
     }
     public int getNumberOfFunctions(){
-        return getNumberOfFunctions();
+        return functions.size();
     }
 
     public void addTeams (Teams teams){
-
+        this.teams.add(teams);
     }
 
     public String getTeamName(int index){
-       return getTeamName(index);
+       return teams.get(index).getName();
     }
 
     public void removeTeam(int index){
         teams.remove(index);
     }
 
+    public Vector<Teams> getTeam(){
+        return teams;
+    }
+
     public int getNumberOfTeams(){
-        return teams.size();
+        return functions.size();
+    }
+
+    public String getDepartementName(){
+        return department.getName();
     }
 
 }

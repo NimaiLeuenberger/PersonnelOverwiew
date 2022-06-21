@@ -4,26 +4,13 @@ import java.util.Vector;
 
 public class JobFunctions {
 
-    private Vector<JobFunctions> designations;
+    private String jobFunction;
 
-    public JobFunctions(){
-
+    public JobFunctions(String jobFunction){
+        this.jobFunction = jobFunction;
     }
 
-    public void addJobFunctions(String function){
-
+    public String getName(){
+        return jobFunction;
     }
-
-    public String getJobFunctions(int index){
-        return getJobFunctions(index);
-    }
-
-    public void removeJobFunctions(int index){
-
-    }
-
-    public int getSize(){
-        return getSize();
-    }
-
 }

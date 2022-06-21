@@ -10,8 +10,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.Vector;
 
 public class OverView extends JFrame {
@@ -111,7 +110,7 @@ public class OverView extends JFrame {
         c.gridx = 1; c.gridy = 1; detailPane.add(abteilField, c);
         // TODO: make a list of the class Person and get its abteilung
         c.gridx = 0; c.gridy = 2; detailPane.add(new JLabel("Funktion: "), c);
-        funkField = new JTextField("Die richtige Funktion");
+        funkField = new JTextField(persons.get(listPers.getSelectedIndex()).getParticipation().getFunctionName(listPers.getSelectedIndex()));
         funkField.setEditable(false);
         c.gridx = 1; c.gridy = 2; detailPane.add(funkField, c);
         String[] teamList =  {persons.get(0).getParticipation().getTeamName(0), persons.get(0).getParticipation().getTeamName(1), persons.get(0).getParticipation().getTeamName(2)};
@@ -157,13 +156,46 @@ public class OverView extends JFrame {
         c.gridx = 0; c.gridy = 1;
         detailPane2.add(new JLabel("Abteilung: "), c);
         c.gridx = 1; c.gridy = 1;
-        abteilField2 = new JTextField("richtige Abteilung");
+        abteilField2 = new JTextField(persons.get(listPers2.getSelectedIndex()).getParticipation().getDepartementName());
+        abteilField2.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    persons.get(listPers2.getSelectedIndex()).getParticipation().getDepartment().setName(abteilField2.getText());
+                    abteilField2.setText(persons.get(listPers2.getSelectedIndex()).getParticipation().getDepartementName());
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         detailPane2.add(abteilField2, c);
         c.gridx = 0; c.gridy = 2;
         detailPane2.add(new JLabel("Funktion: "), c);
         c.gridx = 1; c.gridy = 2;
         String[] funkList = {"COO", "CFO", "Chef"};
         funktionCombo = new JComboBox(funkList);
+        funktionCombo.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED){
+                    int index = listPers2.getSelectedIndex();
+                    persons.get(index).getParticipation().getFunction(index).setName(e.getItem().toString());
+                    funktionCombo.setSelectedItem(persons.get(index).getParticipation().getFunction(index).getName());
+                    System.out.println(funktionCombo.getSelectedItem());
+                }
+                int index = listPers2.getSelectedIndex();
+                persons.get(index).getParticipation().getFunction(index).setName(e.getItem().toString());
+                funktionCombo.setSelectedItem(persons.get(index).getParticipation().getFunction(index).getName());
+            }
+        });
         detailPane2.add(funktionCombo, c);
         c.gridx = 0; c.gridy = 3;
         detailPane2.add(new JLabel("Team: "), c);

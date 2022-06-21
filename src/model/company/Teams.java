@@ -13,4 +13,8 @@ public class Teams {
     public String getName(){
         return this.team;
     }
+
+    public void setName(String name){
+        team = name;
+    }
 }

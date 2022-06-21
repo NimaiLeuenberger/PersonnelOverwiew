@@ -13,4 +13,8 @@ public class JobFunctions {
     public String getName(){
         return jobFunction;
     }
+
+    public void setName(String name){
+        this.jobFunction = name;
+    }
 }

@@ -31,6 +31,10 @@ public class Participation {
         return functions.size();
     }
 
+    public JobFunctions getFunction(int index){
+        return functions.get(index);
+    }
+
     public void addTeams (Teams teams){
         this.teams.add(teams);
     }
@@ -53,6 +57,10 @@ public class Participation {
 
     public String getDepartementName(){
         return department.getName();
+    }
+
+    public Department getDepartment(){
+        return this.department;
     }
 
 }

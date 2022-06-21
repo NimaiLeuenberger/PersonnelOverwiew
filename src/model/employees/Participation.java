@@ -1,17 +1,20 @@
 package model.employees;
 
+import model.company.Department;
 import model.company.JobFunctions;
 import model.company.Teams;
 
 import java.util.Vector;
 
 public class Participation {
-    private JobFunctions[] function;
+    private Vector<JobFunctions> function;
     private Vector<Teams> teams;
-    private Person owner;
+    private Department department;
 
-    public Participation(String person){
-
+    public Participation(JobFunctions f, Teams t, Department d){
+        this.department = d;
+        this.function = new Vector<>();
+        this.teams = new Vector<>();
     }
     public void addFunction(JobFunctions jobFunctions){
 

@@ -5,9 +5,9 @@ public class HRPerson extends Person{
     private int modus;
     private String pwd;
 
-    public HRPerson(){
-        super();
-
+    public HRPerson(String fName, String lName){
+        super(fName, lName);
+        this.modus =
     }
     public void change(String person, int modus) {
 

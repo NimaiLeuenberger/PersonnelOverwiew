@@ -6,9 +6,10 @@ public class Person {
     private String lastName;
     private Participation participation;
 
-    public Person(String fName, String lName ){
+    public Person(String fName, String lName, Participation p ){
         this.firstName= fName;
         this.lastName = lName;
+        this.participation = p;
     }
 
     public void setFirstName(String fName) {

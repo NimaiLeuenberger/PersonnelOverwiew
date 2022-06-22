@@ -191,9 +191,6 @@ public class OverView extends JFrame {
                     funktionCombo.setSelectedItem(persons.get(index).getParticipation().getFunction(index).getName());
                     System.out.println(funktionCombo.getSelectedItem());
                 }
-                int index = listPers2.getSelectedIndex();
-                persons.get(index).getParticipation().getFunction(index).setName(e.getItem().toString());
-                funktionCombo.setSelectedItem(persons.get(index).getParticipation().getFunction(index).getName());
             }
         });
         detailPane2.add(funktionCombo, c);
@@ -233,7 +230,6 @@ public class OverView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddPersDialog addPersDialog = new AddPersDialog(persons);
-                list.add(list.size(), addPersDialog.getNameField());
             }
         });
         delBtn = new JButton(delImg);
@@ -284,8 +280,16 @@ public class OverView extends JFrame {
         personsPane.add(detailPane3);
 
 
+        // stammdaten:
         masterdata = new JPanel();
-        logbook = new JPanel();
+        masterdata.setBorder(BorderFactory.createTitledBorder("Stammdaten bearbeiten: "));
+
+
+        // logbuch:
+        logbook = new JPanel(new FlowLayout());
+        logbook.setBorder(BorderFactory.createTitledBorder("Logbuch: "));
+        logbook.add(new JLabel("logbook:started"));
+
 
         // tab pane:
         tabPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
